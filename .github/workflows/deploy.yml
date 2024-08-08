@@ -38,5 +38,6 @@ jobs:
       - name: Build apps
         run: npx nx run-many -t lint test build
 
-      - run: |
+      - name: rsync contents
+        run: |
           rsync -avz ./dist/* ${{ vars.USER }}@${{ vars.HOST }}:/var/www/apps.ruiramos.com
