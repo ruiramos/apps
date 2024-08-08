@@ -28,16 +28,13 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
-          ssh-keyscan ${{ vars.HOST }} >> ~/.ssh/known_hosts
-          eval $(ssh-agent)
-          ssh-add - <<< "${{ secrets.KEY }}"
-
       - name: Build apps
         run: npx nx run-many -t lint test build
 
       - name: rsync contents
         run: |
+          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+          ssh-keyscan ${{ vars.HOST }} >> ~/.ssh/known_hosts
+          eval $(ssh-agent)
+          ssh-add - <<< "${{ secrets.KEY }}"
           rsync -avz ./dist/* ${{ vars.USER }}@${{ vars.HOST }}:/var/www/apps.ruiramos.com
