@@ -26,8 +26,6 @@ jobs:
 
       - run: npm ci --legacy-peer-deps
 
-      - uses: nrwl/nx-set-shas@v4
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
@@ -38,7 +36,7 @@ jobs:
             SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: Build apps
-        run: npx nx run-many -t lint test build
+        run: npm run build --workspaces
 
       - name: rsync contents
         run: |
